@@ -60,3 +60,16 @@ ollama run llama3.1
 # 4. Run the app
 streamlit run app/ui/app.py
 ```
+
+### Project Status
+
+    Phase 1 MVP in progress — focused on spending control + emergency fund tracking.
+
+### License
+
+    MIT License — free to use, modify, distribute.
+
+### Author
+
+    Tanmay — Bengaluru
+    Finance Tacker for agentic AI, system design, and async Python skills.
