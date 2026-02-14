@@ -2,40 +2,16 @@ from pathlib import Path
 from functools import wraps
 
 from ..core import get_logger
-from ..core.config import DB_LOCATION
-
+from ..core.database.database import Database
 logger = get_logger(__name__)
 
 
 class DataService:
     """
-    Data Service is a mixture of all the data resource realted module.
+    Data Service is a mixture of all the data resource related module.
     """
-    def __init__(self):
-        pass
-    
-    @staticmethod
-    def db_exists(func):
-        """
-        Sees if the database exists at the given location.  
-        """
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if Path(DB_LOCATION).expanduser().resolve().is_file():
-                logger.debug(f"DB exists at location: {DB_LOCATION}")
-            else:
-                logger.warning(f"DB does not exists at location: {DB_LOCATION}")
-                logger.info("Creating a empty database at the given location.")
-
-            return func(*args, **kwargs)
-
-        return wrapper
-    
-    def _create_empty_database(self):
-        """
-        Creates an empty database either at the start of the application or if the database is not found at the location.
-        """
-        pass
+    def __init__(self, db: Database):
+        self.db = db
 
 
 if __name__ == '__main__':

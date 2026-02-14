@@ -34,6 +34,8 @@ class Goal(Base):
     is_active = Column(Integer, default=1)
     created_at = Column(DateTime, server_default=func.now())
     last_updated = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    suggestions = relationship("Suggestion", back_populates="goal")
+    
 
 
 class UserSetting(Base):

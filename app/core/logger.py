@@ -33,6 +33,7 @@ class FancyFormatter(logging.Formatter):
 def get_logger(name: str = "app", level=logging.DEBUG):
     logger = logging.getLogger(name)
     logger.setLevel(level)
+    logger.propagate = False
 
     if logger.handlers:
         return logger  # prevent duplicate handlers
