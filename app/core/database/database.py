@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy import text
+from sqlalchemy import text, insert, select
 from sqlalchemy.orm import sessionmaker
 from pathlib import Path
 from .models import Base
@@ -46,7 +46,56 @@ class Database:
             class_=AsyncSession,
             expire_on_commit=False
         )
-        return AsyncSessionLocal
+        return AsyncSessionLocal\
+    
+    async def insert_one(self, model, record: dict):
+        """
+        Insert a single record into a table.
+
+        Args:
+            model: SQLAlchemy model class
+            record (dict): Column-value mapping
+
+        Returns:
+            Result object from SQLAlchemy execution
+        """
+        if not record:
+            logger.warning("Empty record provided for insert.")
+            return None
+
+        async with self.get_session()() as session:
+            async with session.begin():
+                result = await session.execute(insert(model).values(**record))
+
+        logger.info(f"Inserted 1 record into {model.__tablename__}")
+        return result
+
+    async def bulk_insert(self, model, records: list[dict]):
+        """
+        Generic bulk insert utility.
+
+        Args:
+            model: SQLAlchemy model class
+            records (list[dict]): List of row dictionaries
+        """
+        if not records:
+            logger.warning("No records provided for bulk insert.")
+            return
+
+        async with self.get_session()() as session:
+            async with session.begin():
+                await session.execute(insert(model), records)
+
+        logger.info(f"Inserted {len(records)} records into {model.__tablename__}")
+
+    async def verify_insert(self, model: any, ref_no: str):
+
+        async with self.get_session()() as session:
+            result = await session.execute(
+                select(model).where(model.ref_no == ref_no)
+            )
+
+            return result.scalar_one_or_none()
 
     async def integrity_check(self):
         """

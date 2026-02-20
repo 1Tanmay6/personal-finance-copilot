@@ -11,7 +11,7 @@ class Transaction(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     transaction_date = Column(String, nullable=False)  # 'YYYY-MM-DD'
     description = Column(String, nullable=False)
-    amount = Column(Float, nullable=False)  # positive=credit, negative=debit
+    amount = Column(Float, nullable=False) 
     type = Column(String, nullable=False)  # 'CREDIT' or 'DEBIT'
     closing_balance = Column(Float, nullable=True)
     account = Column(String, nullable=True)
